@@ -22,7 +22,7 @@ public class TourConverter {
         tour.setEndLocation(domain.getEndLocation().getName());
         tour.setMaxMember(domain.getMaxMember());
         if (domain.getStatus().equals(STATUS_OPEN)) {
-            tour.setStatus("Mở");
+            tour.setStatus("Đang mở");
         } else if (domain.getStatus().equals(STATUS_CLOSE)) {
             tour.setStatus("Đóng");
         } else if (domain.getStatus().equals(STATUS_STARTED)) {

@@ -4,8 +4,7 @@ import com.kien.dddsample.domain.location.ILocationRepository;
 import com.kien.dddsample.domain.location.LocationDomain;
 import com.kien.dddsample.domain.tour.TourCode;
 import com.kien.dddsample.domain.tour.TourDomain;
-import com.kien.dddsample.domain.user.IUserRepository;
-import com.kien.dddsample.domain.user.UserDomain;
+import com.kien.dddsample.domain.user.UserCode;
 import com.kien.dddsample.infrastructure.dto.TourRegistration;
 import com.kien.dddsample.infrastructure.model.Tour;
 import lombok.NonNull;
@@ -26,9 +25,9 @@ public class TourFactory {
 
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     @Autowired
-    private ILocationRepository ILocationRepository;
+    private ILocationRepository locationRepository;
     @Autowired
-    private IUserRepository userRepository;
+    private UserFactory userFactory;
 
     public TourDomain create(TourRegistration registration) {
         try {
@@ -37,8 +36,8 @@ public class TourFactory {
             if (startDate.compareTo(endDate) >= 0) {
                 throw new IllegalArgumentException("End date must after start date");
             }
-            LocationDomain startLocation = ILocationRepository.get(registration.getStartLocation());
-            LocationDomain endLocation = ILocationRepository.get(registration.getEndLocation());
+            LocationDomain startLocation = locationRepository.get(registration.getStartLocation());
+            LocationDomain endLocation = locationRepository.get(registration.getEndLocation());
             if (startLocation.sameIdentityAs(LocationDomain.UNKNOWN) || endLocation.sameIdentityAs(LocationDomain.UNKNOWN)) {
                 throw new IllegalArgumentException("Invalid location");
             }
@@ -51,13 +50,14 @@ public class TourFactory {
     }
 
     public TourDomain build(@NonNull Tour tour) {
-        LocationDomain start = ILocationRepository.get(tour.getStartLocation().getId());
-        LocationDomain end = ILocationRepository.get(tour.getEndLocation().getId());
-        List<UserDomain> users = new ArrayList<>();
+        LocationDomain start = locationRepository.get(tour.getStartLocation().getId());
+        LocationDomain end = locationRepository.get(tour.getEndLocation().getId());
+        List<UserCode> users = new ArrayList<>();
         tour.getUsers().forEach((item) ->
-                users.add(userRepository.get(item.getId()))
+                users.add(new UserCode(item.getId()))
         );
-        return new TourDomain(new TourCode(tour.getId()), tour.getStartTime(), tour.getEndTime(), start, end,
+        TourDomain domain = new TourDomain(new TourCode(tour.getId()), tour.getStartTime(), tour.getEndTime(), start, end,
                 tour.getCost(), tour.getDescription(), tour.getStatus(), tour.getMaxMember(), tour.getCreatedAt(), users);
+        return domain;
     }
 }

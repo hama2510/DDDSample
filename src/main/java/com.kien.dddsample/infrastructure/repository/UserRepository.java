@@ -3,6 +3,7 @@ package com.kien.dddsample.infrastructure.repository;
 import com.kien.dddsample.domain.user.IUserRepository;
 import com.kien.dddsample.domain.user.UserDomain;
 import com.kien.dddsample.infrastructure.factory.UserFactory;
+import com.kien.dddsample.infrastructure.model.Tour;
 import com.kien.dddsample.infrastructure.model.User;
 import com.kien.dddsample.infrastructure.repository.hibernate.UserRepositoryHibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class UserRepository implements IUserRepository {
         user.setPhone(domain.getPhone());
         user.setUsername(domain.getUsername());
         user.setBalance(domain.getBalance());
-        userRepositoryHibernate.insert(user);
+        domain.getTours().forEach((item) ->
+                user.getTours().add(new Tour(item.getId().getCode()))
+        );
+        userRepositoryHibernate.save(user);
     }
 }

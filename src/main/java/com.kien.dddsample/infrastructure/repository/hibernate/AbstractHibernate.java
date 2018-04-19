@@ -55,15 +55,11 @@ public abstract class AbstractHibernate<E> {
         return getSession().createQuery(query).list();
     }
 
-    public void insert(E e) {
-        getSession().save(e);
-    }
-
     public void delete(E e) {
         getSession().delete(e);
     }
 
-    public void update(E e) {
+    public void save(E e) {
         getSession().merge(e);
     }
 

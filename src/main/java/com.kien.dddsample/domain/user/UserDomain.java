@@ -1,8 +1,13 @@
 package com.kien.dddsample.domain.user;
 
 import com.kien.dddsample.domain._shared.Entity;
+import com.kien.dddsample.domain.tour.TourDomain;
 import lombok.Getter;
 import lombok.NonNull;
+
+import java.util.List;
+
+import static com.kien.dddsample.infrastructure.constant.TourConstant.STATUS_FINISHED;
 
 @Getter
 public class UserDomain implements Entity<UserDomain> {
@@ -13,9 +18,12 @@ public class UserDomain implements Entity<UserDomain> {
     private String email;
     private String phone;
     private Integer balance;
+    private List<TourDomain> tours;
+
 
     public UserDomain(@NonNull UserCode code, @NonNull String username, @NonNull String password, @NonNull String name,
-                      @NonNull String email, @NonNull String phone, @NonNull Integer balance) {
+                      @NonNull String email, @NonNull String phone, @NonNull Integer balance,
+                      @NonNull List<TourDomain> tours) {
         this.code = code;
         this.username = username;
         this.password = password;
@@ -23,8 +31,21 @@ public class UserDomain implements Entity<UserDomain> {
         this.email = email;
         this.phone = phone;
         this.balance = balance;
+        this.tours = tours;
     }
 
+    public void bookTour(TourDomain tour) {
+        for (TourDomain item : tours) {
+            if (item.getStatus() != STATUS_FINISHED) {
+                if (item.getEndDate().after(tour.getStartDate()) || item.getStartDate().before(tour.getEndDate())) {
+                    throw new IllegalStateException("Conflict time with tour " + item.getId().getCode());
+                }
+            }
+        }
+        pay(tour.getCost());
+        tour.addMember(this);
+        tours.add(tour);
+    }
 
     public void deposit(@NonNull Integer amount) {
         if (amount <= 0)
@@ -32,7 +53,7 @@ public class UserDomain implements Entity<UserDomain> {
         balance += amount;
     }
 
-    public void pay(@NonNull Integer amount) {
+    private void pay(@NonNull Integer amount) {
         if (amount <= 0)
             throw new IllegalArgumentException("Invalid deposit amount");
         if (balance < amount)

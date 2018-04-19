@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationFactory {
 
-    public LocationDomain create(Location location) {
+    public LocationDomain build(Location location) {
         if (location != null) {
             LocationCode locationCode = new LocationCode(location.getId());
             return new LocationDomain(locationCode, location.getName());

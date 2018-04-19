@@ -39,9 +39,9 @@ public class TourRepository implements ITourRepository {
         tour.setCreatedAt(domain.getCreatedAt());
         tour.setMaxMember(domain.getMaxMember());
         domain.getMembers().forEach((item) ->
-                tour.getUsers().add(new User(item.getCode().getCode()))
+                tour.getUsers().add(new User(item.getCode()))
         );
-        tourRepositoryHibernate.insert(tour);
+        tourRepositoryHibernate.save(tour);
     }
 
     @Override

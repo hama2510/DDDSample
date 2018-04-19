@@ -2,10 +2,13 @@ package com.kien.dddsample.domain.tour;
 
 import com.kien.dddsample.domain._shared.Entity;
 import com.kien.dddsample.domain.location.LocationDomain;
+import com.kien.dddsample.domain.user.UserCode;
 import com.kien.dddsample.domain.user.UserDomain;
+import com.kien.dddsample.infrastructure.model.User;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,13 +29,13 @@ public class TourDomain implements Entity<TourDomain> {
     private Integer status;
     private Integer maxMember;
     private Date createdAt;
-    private List<UserDomain> members;
+    private List<UserCode> members;
 
     public TourDomain(@NonNull TourCode id, @NonNull Date startDate, @NonNull Date endDate,
                       @NonNull LocationDomain startLocation,
                       @NonNull LocationDomain endLocation, @NonNull Integer cost, String description,
                       @NonNull Integer status, @NonNull Integer maxMember, @NonNull Date createdAt,
-                      @NonNull List<UserDomain> members) {
+                      @NonNull List<UserCode> members) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -73,9 +76,15 @@ public class TourDomain implements Entity<TourDomain> {
         if (isExceedMaxMember()) {
             throw new RuntimeException("The members of this tour is exceed the maximum number");
         }
-        members.add(user);
+        members.add(user.getCode());
         if (members.size() == maxMember) {
             status = STATUS_CLOSE;
         }
+    }
+
+    public List<UserCode> getMembers() {
+        List<UserCode> users = new ArrayList<>();
+        users.addAll(members);
+        return users;
     }
 }

@@ -25,13 +25,13 @@ public class LocationRepository implements ILocationRepository {
         List<Location> locations = locationRepositoryHibernate.findAll();
         List<LocationDomain> domains = new ArrayList<>();
         locations.forEach((item) -> {
-            domains.add(locationFactory.create(item));
+            domains.add(locationFactory.build(item));
         });
         return domains;
     }
 
     @Override
     public LocationDomain get(String code) {
-        return locationFactory.create(locationRepositoryHibernate.get(code));
+        return locationFactory.build(locationRepositoryHibernate.get(code));
     }
 }

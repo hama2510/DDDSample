@@ -4,7 +4,6 @@ import com.kien.dddsample.domain.tour.ITourRepository;
 import com.kien.dddsample.domain.tour.TourDomain;
 import com.kien.dddsample.domain.user.IUserRepository;
 import com.kien.dddsample.domain.user.UserDomain;
-import com.kien.dddsample.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +17,8 @@ public class UserService {
     public void bookTour(String userCode, String tourCode) {
         TourDomain tour = tourRepository.get(tourCode);
         UserDomain user = userRepository.get(userCode);
-        tour.addMember(user);
-        tourRepository.save(tour);
-        user.pay(tour.getCost());
+        user.bookTour(tour);
         userRepository.save(user);
+        tourRepository.save(tour);
     }
 }

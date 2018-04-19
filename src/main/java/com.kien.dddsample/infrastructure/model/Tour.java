@@ -37,4 +37,12 @@ public class Tour {
             @JoinColumn(name = "user_id", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
+
+    public Tour(String id) {
+        this.id = id;
+    }
+
+    public Tour() {
+
+    }
 }
