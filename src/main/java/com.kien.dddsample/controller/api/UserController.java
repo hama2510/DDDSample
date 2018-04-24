@@ -73,4 +73,16 @@ public class UserController {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/api/users/{id}", method = RequestMethod.GET)
+    public ResponseEntity get(@PathVariable("id") String id) {
+        try {
+            UserDomain user = userRepository.get(id);
+            return new ResponseEntity(userConverter.convert(user), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

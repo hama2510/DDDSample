@@ -37,7 +37,7 @@ public class UserDomain implements Entity<UserDomain> {
     public void bookTour(TourDomain tour) {
         for (TourDomain item : tours) {
             if (item.getStatus() != STATUS_FINISHED) {
-                if (item.getEndDate().after(tour.getStartDate()) || item.getStartDate().before(tour.getEndDate())) {
+                if (!(tour.getEndDate().before(item.getStartDate()) || tour.getStartDate().after(item.getEndDate()))) {
                     throw new IllegalStateException("Conflict time with tour " + item.getId().getCode());
                 }
             }
