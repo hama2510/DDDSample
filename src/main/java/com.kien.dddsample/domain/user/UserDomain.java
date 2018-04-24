@@ -53,6 +53,8 @@ public class UserDomain implements Entity<UserDomain> {
         balance += amount;
     }
 
+
+
     private void pay(@NonNull Integer amount) {
         if (amount <= 0)
             throw new IllegalArgumentException("Invalid deposit amount");

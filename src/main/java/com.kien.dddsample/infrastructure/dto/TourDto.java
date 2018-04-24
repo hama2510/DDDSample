@@ -11,8 +11,9 @@ public class TourDto {
     private String endTime;
     private String startLocation;
     private String endLocation;
-    private Integer cost;
+    private String cost;
     private String description;
     private String status;
     private Integer maxMember;
+    private Integer currentMember;
 }

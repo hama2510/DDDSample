@@ -9,10 +9,7 @@ import com.kien.dddsample.infrastructure.service.converter.TourConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +24,7 @@ public class TourController {
     @Autowired
     private TourConverter tourConverter;
 
+    @CrossOrigin
     @RequestMapping(value = "/api/tours", method = RequestMethod.POST)
     public ResponseEntity createTour(@RequestBody TourRegistration tourRegistration) {
         try {
@@ -39,6 +37,7 @@ public class TourController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/api/tours", method = RequestMethod.GET)
     public List<TourDto> findAll() {
         List<TourDto> tours = new ArrayList<>();

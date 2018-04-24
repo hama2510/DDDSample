@@ -29,6 +29,15 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public UserDomain findByUsername(String username) {
+        User user = userRepositoryHibernate.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("Not found user with username: " + username);
+        }
+        return userFactory.build(user);
+    }
+
+    @Override
     public void save(UserDomain domain) {
         User user = new User();
         user.setId(domain.getCode().getCode());

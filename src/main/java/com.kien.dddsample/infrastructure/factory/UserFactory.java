@@ -23,7 +23,7 @@ public class UserFactory {
     private TourFactory tourFactory;
 
     public UserDomain create(UserRegistration registration) {
-        return new UserDomain(new UserCode(UUID.randomUUID().toString()), registration.getUsername(), registration.getPassword(), registration.getName(), registration.getEmail(), registration.getPhone(), 0, new ArrayList<>());
+        return new UserDomain(new UserCode(UUID.randomUUID().toString()), registration.getUsername(), passwordEncoder.encode(registration.getPassword()), registration.getName(), registration.getEmail(), registration.getPhone(), 0, new ArrayList<>());
     }
 
     public UserDomain build(@NonNull User user) {
@@ -31,6 +31,6 @@ public class UserFactory {
         user.getTours().forEach((item) ->
                 tours.add(tourFactory.build(item))
         );
-        return new UserDomain(new UserCode(user.getId()), user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getName(), user.getEmail(), user.getPhone(), user.getBalance(), tours);
+        return new UserDomain(new UserCode(user.getId()), user.getUsername(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getBalance(), tours);
     }
 }

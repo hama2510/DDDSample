@@ -26,8 +26,6 @@ public class TourFactory {
     private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     @Autowired
     private ILocationRepository locationRepository;
-    @Autowired
-    private UserFactory userFactory;
 
     public TourDomain create(TourRegistration registration) {
         try {

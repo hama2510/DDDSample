@@ -8,6 +8,7 @@ package com.kien.dddsample.infrastructure.repository.hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,11 +29,7 @@ public abstract class AbstractHibernate<E> {
 
     protected Session getSession() {
         Session session;
-//        try {
         session = sessionFactory.getCurrentSession();
-//        } catch (HibernateException e) {
-//            session = sessionFactory.openSession();
-//        }
         return session;
     }
 
@@ -40,30 +37,44 @@ public abstract class AbstractHibernate<E> {
         return sessionFactory.getCriteriaBuilder();
     }
 
-    public List<E> findAll() {
+    public ArrayList<E> findAll() {
+        Transaction trans = getSession().beginTransaction();
         CriteriaQuery query = getSession().getCriteriaBuilder().createQuery(clazz);
         Root<E> root = query.from(clazz);
         query.select(root);
-        return getSession().createQuery(query).list();
+        ArrayList<E> arr = (ArrayList<E>) getSession().createQuery(query).list();
+        trans.commit();
+        return arr;
     }
 
-    protected List<E> query(AbstractQuery abstractQuery) {
+    protected ArrayList<E> query(AbstractQuery abstractQuery) {
+        Transaction trans = getSession().beginTransaction();
         CriteriaBuilder builder = getSession().getCriteriaBuilder();
         CriteriaQuery query = builder.createQuery(clazz);
         Root<E> root = query.from(clazz);
         query.select(root).where(abstractQuery.createExpression(builder, root));
-        return getSession().createQuery(query).list();
-    }
-
-    public void delete(E e) {
-        getSession().delete(e);
-    }
-
-    public void save(E e) {
-        getSession().merge(e);
+        ArrayList<E> arr = (ArrayList<E>) getSession().createQuery(query).list();
+        trans.commit();
+        return arr;
     }
 
     public E get(String id) {
-        return getSession().load(clazz, id);
+        Transaction trans = getSession().beginTransaction();
+        E e = getSession().load(clazz, id);
+        trans.commit();
+        return e;
+    }
+
+    public void save(E e) {
+        Transaction trans = getSession().beginTransaction();
+        getSession().saveOrUpdate(e);
+        trans.commit();
+    }
+
+    public void delete(E e) {
+        Session session = getSession();
+        Transaction trans = session.beginTransaction();
+        session.delete(e);
+        trans.commit();
     }
 }

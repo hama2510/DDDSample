@@ -38,7 +38,7 @@ public class HibernateConfig {
                 setProperty("hibernate.hbm2ddl.auto", "update");
                 setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
                 setProperty("hibernate.enable_lazy_load_no_trans", "true");
-//                setProperty("hibernate.current_session_context_class", "thread");
+                setProperty("hibernate.current_session_context_class", "thread");
                 setProperty("show_sql", "true");
             }
         });

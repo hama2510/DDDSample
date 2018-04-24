@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DepositDto {
-    private String serial;
+public class CardRegistration {
+    private Integer money;
 }
